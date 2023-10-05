@@ -4,7 +4,6 @@ function logger(req, res, next) {
   const timestamp = new Date().toLocaleString()
   const method = req.method
   const url = req.originalUrl
-//  console.log('logger middleware')
 console.log(`[${timestamp}] ${method} ${url}`)
  next();
 }
@@ -24,22 +23,39 @@ async function validateUserId(req, res, next) {
     res.status(500).json({
       message: 'problem finding user',
     })
-  }
+  } 
+  
 }
 
 function validateUser(req, res, next) {
-  console.log('validateUser middleware')
-  next();
-}
+  const { name } = req.body
+  if (!name || !name.trim()) {
+    res.status(400).json({
+      message: 'missing required name field',
+    }) 
+  } else {
+    req.name = name.trim()
+    next()
+   }
+  }
+  
+ 
 
 function validatePost(req, res, next) {
-  console.log('validatePost middleware')
-  next();
+  const { text } = req.body
+  if (!text || !text.trim()) {
+    res.status(400).json({
+      message: 'missing required text field',
+    }) 
+  } else {
+    req.text = text.trim()
+    next()
+   }
 }
 
-module.exports = (
-  logger,
+module.exports = {
   validateUserId,
   validateUser,
   validatePost,
-);
+  logger,
+}
