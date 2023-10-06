@@ -4,7 +4,7 @@ const {
   validateUserId,
   validateUser,
   validatePost, 
-} = require('../mibbleware/middleware');
+} = require('./mibbleware/middleware');
 
 const User = require('./users-model');
 const Post = require('../posts/posts-model');
@@ -80,5 +80,4 @@ router.use((err, req, res, next) => {
   })
 })
 
-// do not forget to export the router
 module.exports = router
