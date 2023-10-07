@@ -4,7 +4,7 @@ const {
   validateUserId,
   validateUser,
   validatePost, 
-} = require('./mibbleware/middleware');
+} = require('../middleware/middleware');
 
 const User = require('./users-model');
 const Post = require('../posts/posts-model');
@@ -32,11 +32,11 @@ router.post('/', validateUser, (req, res, next) => {
 });
 
 router.put('/:id', validateUserId, validateUser, (req, res, next) => {
-  User.update(req.params.id, { req.name })
+  User.update(req.params.id, { name: req.name })
     .then(() => {
       return User.getById(req.params.id)
     })
-    .then(userv=> {
+    .then(user => {
       res.json(user)
     })
     .catch(next)
@@ -44,7 +44,7 @@ router.put('/:id', validateUserId, validateUser, (req, res, next) => {
 
 router.delete('/:id', validateUserId, async (req, res, next) => {
   try {
-    const result = await User.remove(req.params.id)
+    await User.remove(req.params.id)
     res.json(req.user) 
   } catch (err) {
     next(err) 
@@ -63,7 +63,7 @@ router.get('/:id/posts', validateUserId, async (req, res, next) => {
 router.post('/:id/posts', validateUserId, validatePost, async (req, res, next) => {
   try {
     const result = await Post.insert({
-      user_id: req.params.id
+      user_id: req.params.id,
       text: req.text, 
     })
     res.status(201).json(result)

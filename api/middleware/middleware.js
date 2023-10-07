@@ -4,7 +4,7 @@ function logger(req, res, next) {
   const timestamp = new Date().toLocaleString()
   const method = req.method
   const url = req.originalUrl
-console.log(`[${timestamp}] ${method} ${url}`)
+console.log(`[${timestamp}] ${method} to ${url}`)
  next();
 }
 
@@ -12,7 +12,9 @@ async function validateUserId(req, res, next) {
   try {
     const user = await User.getById(req.params.id)
     if (!user) {
-     next({ status: (404),  message: 'user not found' })
+     res.status(404).json({
+      message: 'no such user',
+     })
     } else {
       req.user = user
       next();
